@@ -22,6 +22,7 @@ import {
 import { ArrowRight } from 'phosphor-react'
 import { convertTimeStringToMinutes } from '@/utils/convert-time-string-to-minutes'
 import { api } from '@/lib/axios'
+import { useRouter } from 'next/router'
 
 const timeIntervalsFormSchema = z.object({
   intervals: z
@@ -86,6 +87,8 @@ export default function TimeIntervals() {
     },
   })
 
+  const router = useRouter()
+
   const weekDays = getWeekDays()
 
   const { fields } = useFieldArray({
@@ -100,6 +103,10 @@ export default function TimeIntervals() {
     await api.post('/users/time-intervals', {
       intervals,
     })
+  }
+
+  async function handleNavigateToNextStep() {
+    await router.push('/register/update-profile')
   }
 
   return (
@@ -158,7 +165,11 @@ export default function TimeIntervals() {
         {errors.intervals && (
           <FormError size="sm">{errors.intervals.message}</FormError>
         )}
-        <Button type="submit" disabled={isSubmitting}>
+        <Button
+          onClick={handleNavigateToNextStep}
+          type="submit"
+          disabled={isSubmitting}
+        >
           Prõximo passo
           <ArrowRight />
         </Button>
