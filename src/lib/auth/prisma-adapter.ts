@@ -3,7 +3,7 @@ import { Adapter } from 'next-auth/adapters'
 import { parseCookies, destroyCookie } from 'nookies'
 import { prisma } from '../prisma'
 
-export function PrimaAdapter(
+export function PrismaAdapter(
   req: NextApiRequest | NextPageContext['req'],
   res: NextApiResponse | NextPageContext['res'],
 ): Adapter {
@@ -39,6 +39,7 @@ export function PrimaAdapter(
         avatar_url: prismaUser.avatar_url!,
       }
     },
+
     async getUser(id) {
       const user = await prisma.user.findUnique({
         where: {
@@ -107,6 +108,7 @@ export function PrimaAdapter(
         avatar_url: user.avatar_url!,
       }
     },
+
     async updateUser(user) {
       const prismaUser = await prisma.user.update({
         where: {
@@ -128,6 +130,7 @@ export function PrimaAdapter(
         avatar_url: prismaUser.avatar_url!,
       }
     },
+
     async linkAccount(account) {
       await prisma.account.create({
         data: {
@@ -145,6 +148,7 @@ export function PrimaAdapter(
         },
       })
     },
+
     async createSession({ sessionToken, userId, expires }) {
       await prisma.session.create({
         data: {
@@ -160,6 +164,7 @@ export function PrimaAdapter(
         expires,
       }
     },
+
     async getSessionAndUser(sessionToken) {
       const prismaSession = await prisma.session.findUnique({
         where: {
@@ -192,6 +197,7 @@ export function PrimaAdapter(
         },
       }
     },
+
     async updateSession({ sessionToken, userId, expires }) {
       const prismaSession = await prisma.session.update({
         where: {
@@ -205,10 +211,11 @@ export function PrimaAdapter(
 
       return {
         sessionToken: prismaSession.session_token,
-        expires: prismaSession.expires,
         userId: prismaSession.user_id,
+        expires: prismaSession.expires,
       }
     },
+
     async deleteSession(sessionToken) {
       await prisma.session.delete({
         where: {
