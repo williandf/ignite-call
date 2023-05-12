@@ -6,17 +6,17 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-const claimUsernameFormSchema = z.object({
+const ClaimUsernameFormSchema = z.object({
   username: z
     .string()
-    .min(3, { message: 'O usuário precisa ter pelo menos 3 letras' })
+    .min(3, { message: 'O usuário precisa ter pelo menos 3 letras.' })
     .regex(/^([a-z\\-]+)$/i, {
-      message: 'O usuário pode ter apenas letras e hifens',
+      message: 'O usuário pode ter apenas letras e hifens.',
     })
     .transform((username) => username.toLowerCase()),
 })
 
-type ClaimUsernameFormData = z.infer<typeof claimUsernameFormSchema>
+type ClaimUsernameFormData = z.infer<typeof ClaimUsernameFormSchema>
 
 export function ClaimUsernameForm() {
   const {
@@ -24,7 +24,7 @@ export function ClaimUsernameForm() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<ClaimUsernameFormData>({
-    resolver: zodResolver(claimUsernameFormSchema),
+    resolver: zodResolver(ClaimUsernameFormSchema),
   })
 
   const router = useRouter()
@@ -32,8 +32,9 @@ export function ClaimUsernameForm() {
   async function handleClaimUsername(data: ClaimUsernameFormData) {
     const { username } = data
 
-    await router.push(`/register?username=${username}`)
+    router.push(`/register?username=${username}`)
   }
+
   return (
     <>
       <Form as="form" onSubmit={handleSubmit(handleClaimUsername)}>
@@ -48,6 +49,7 @@ export function ClaimUsernameForm() {
           <ArrowRight />
         </Button>
       </Form>
+
       <FormAnnotation>
         <Text size="sm">
           {errors.username
